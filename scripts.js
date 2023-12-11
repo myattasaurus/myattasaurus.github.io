@@ -1,76 +1,18 @@
-window.onload = function () {
-    createTaskEntryTheFirstTime();
-}
+import { Form, Task, TaskEntry } from "./Element.js";
 
-window.onkeyup = function (event) {
-    if (event.code === 'Enter') {
-        let task = findTask();
-        if (task) {
-            completeTask();
-        } else {
-            let taskEntryValue = removeTaskEntry();
-            createTask(taskEntryValue);
-        }
-    }
+const form = new Form('dontainer', 'body');
+const taskEntry = new TaskEntry('taskEntry', 'body');
+const task = new Task('task', 'body');
+
+window.onload = function () {
+    taskEntry.create();
+    // form.appendChild(taskEntry);
+    // form.onsubmit = function () {
+    //     task.create(taskEntry.value);
+    //     taskEntry.destroy();
+    // }
 };
 
-function completeTask() {
-    crossOutTask();
-    removeTaskAndCreateTaskEntry();
-}
-
-function findTaskEntry() {
-    return document.getElementById('taskEntry');
-}
-
-function createTaskEntryTheFirstTime() {
-    let input = createTaskEntry();
-    input.setAttribute('placeholder', 'What one thing do you need to do?');
-}
-
-function createTaskEntry() {
-    let input = document.createElement('input');
-    input.setAttribute('id', 'taskEntry');
-    input.setAttribute('type', 'text');
-    input.onblur = function (event) {
-        findTaskEntry().focus();
-    };
-
-    document.getElementById('dontainer').appendChild(input);
-    input.focus();
-    return input;
-}
-
-function removeTaskEntry() {
-    let taskEntry = findTaskEntry();
-    let taskEntryValue = taskEntry.value;
-    taskEntry.onblur = null;
-    taskEntry.remove();
-    return taskEntryValue;
-}
-
-function findTask() {
-    return document.getElementById('task');
-}
-
-function createTask(taskEntryValue) {
-    let para = document.createElement('p');
-    para.setAttribute('id', 'task');
-    para.appendChild(document.createTextNode(taskEntryValue));
-    para.onclick = function (event) {
-        completeTask();
-    };
-
-    document.getElementById('dontainer').appendChild(para);
-}
-
-function crossOutTask() {
-    findTask().style.textDecorationLine = 'line-through';
-}
-
-function removeTaskAndCreateTaskEntry() {
-    setTimeout(() => {
-        findTask().remove();
-        createTaskEntry();
-    }, 400);
-}
+window.onkeyup = function (event) {
+    task.create(event.code);
+};
