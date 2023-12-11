@@ -1,23 +1,19 @@
 import { Form, Task, TaskEntry } from "./Element.js";
 
-const form = new Form('dontainer', 'body');
-const taskEntry = new TaskEntry('taskEntry', 'dontainer');
-const task = new Task('task', 'dontainer');
+let form = new Form();
+let taskEntry = new TaskEntry();
+let task = new Task();
 
-window.onload = function () {
-    form.create();
-    taskEntry.createFirstTime();
-    form.onsubmit = completeTaskEntry;
+window.onload = () => {
+    taskEntry.create();
+    form.onsubmit = () => {
+        task.create(taskEntry);
+        taskEntry.destroy();
+    };
 };
 
-function completeTaskEntry() {
-    task.create(taskEntry.value);
-    taskEntry.destroy();
-    form.onsubmit = completeTask;
-}
-
-function completeTask() {
-    task.destroy();
-    taskEntry.create();
-    form.onsubmit = completeTaskEntry;
+window.onkeydown = (key) => {
+    if (key.code === 'Enter' && task.exists()) {
+        task.complete();
+    }
 }
