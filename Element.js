@@ -38,9 +38,9 @@ export class Form extends Element {
         this.element.onsubmit = fcn;
     }
 
-    destroy() {
-        this.element.onsubmit = null;
-        super.destroy();
+    create() {
+        super.create();
+        this.element.setAttribute('action', 'javascript:;');
     }
 }
 
@@ -53,10 +53,21 @@ export class TaskEntry extends Element {
         return this.element.value;
     }
 
+    createFirstTime() {
+        this.create();
+        this.element.setAttribute('placeholder', 'What is one thing you will do?');
+    }
+
     create() {
         super.create();
         this.element.setAttribute('type', 'text');
-        this.element.setAttribute('placeholder', 'What is one thing you will do?');
+        this.element.onblur = this.element.focus;
+        this.element.focus();
+    }
+
+    destroy() {
+        this.element.onblur = null;
+        super.destroy();
     }
 }
 
